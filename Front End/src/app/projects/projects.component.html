@@ -1,0 +1,412 @@
+<!-- Hold process until all process in constructor, successfully loaded -->
+<div [ngSwitch]='status'>
+    <div *ngSwitchCase="false">
+
+            <div class="loader"></div>
+            
+    </div>
+    <div *ngSwitchCase="true">
+
+        <div class="container">
+                <h4 align="center" style="padding-bottom: 1%; padding-top: 2%">
+                        <strong>Summery</strong>
+                    </h4>
+            <div class="row">
+
+                <div class="col">
+
+                    <!-- Project Details Card -->
+                    <div class="card card-cascade wider">
+                        <div class="card-body text-center">
+
+
+                            <h2 class="indigo-text">
+                                <strong>{{project.name}}</strong>
+                            </h2>
+                            <p class="card-text">{{project.description}}</p>
+
+                            <h6 class="card-text">
+                                <i class="fa fa-calendar prefix"> Start Date : {{project.startdate}}</i>
+                            </h6>
+                            <h6 class="card-text">
+                                <i class="fa fa-calendar prefix"> End Date : {{project.enddate}}</i>
+                            </h6>
+
+                            <!-- check current logged user is admin of this project -->
+                            <div [ngSwitch]='userstatus'>
+
+                                <!-- if user is admin, Display update and delete project button -->
+                                <div *ngSwitchCase="'Admin'">
+                                    <button type="button" class="btn btn-info waves-light" mdbWavesEffect (click)="form1.show();setprojectvalues();">Update Details</button>
+                                    <button type="button" class="btn btn-info waves-light" (click)=" deleteproject()" mdbWavesEffect>Delete Project</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Project Details Card -->
+
+                </div>
+                <div class="col">
+                    <!-- Progress Bar -->
+                    <div style="display: block">
+                        <canvas mdbChart width="200px" height="200px" [chartType]="chartType" [data]="chartData" [labels]="chartLabels" [colors]="chartColors"
+                            [options]="chartOptions" [legend]="true" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
+                        </canvas>
+                    </div>
+                    <!--End Progress Bar -->
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container">
+
+            <hr>
+            <!-- Team members -->
+            <h4 align="center" style="padding-bottom: 1%; padding-top: 2%">
+                <strong>Team Members</strong>
+            </h4>
+
+
+            <div class="row" style="padding-bottom: 1%">
+                <div class="col-md-4" align="right" >
+                    <p><strong>Select User </strong></p>
+                </div>
+                <div class="col-md-4" style="padding-top: 10">
+                    <!-- User Search -->
+                    <select [(ngModel)]="search" name="search" class="form-control" >
+                        <option *ngFor="let peo of people" value="{{peo._id}}">{{peo.name}}</option>
+                        Selected: {{search}}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <!-- add User -->
+                    <button type="button" class="btn btn-success btn-rounded waves-light" mdbWavesEffect (click)="addmem(search)">Add Member</button>
+                </div>
+
+            </div>
+
+
+
+            <!-- Team members Table -->
+            <div class="card card-cascade wider" style="width: 100%">
+                <table class="table table-hover" width="100%">
+                    <thead align="middle">
+                        <tr>
+                            <th class="align-middle" width="25%">Name</th>
+                            <th class="align-middle" width="25%">Email</th>
+                            <th class="align-middle" width="25%">Role</th>
+                            <th class="align-middle" width="25%">Remove</th>
+                        </tr>
+                    </thead>
+
+                    <!-- get membe from teammembers -->
+                    <tbody width="100%" align="middle" *ngFor="let membe of teammembers">
+
+                        <!-- get meme from membe.member -->
+                        <tr *ngFor="let meme of membe.member" style="width:100%">
+                            <td class="align-middle" width="25%">{{meme.name}}</td>
+                            <td class="align-middle" width="25%">{{meme.email}}</td>
+                            <td class="align-middle" width="25%">{{membe.role}}</td>
+
+                            <!-- check current user is admin or not -->
+                            <div [ngSwitch]='userstatus'>
+
+                                <!-- if current user is admin -->
+                                <div *ngSwitchCase="'Admin'">
+
+                                    <!-- check member role -->
+                                    <div [ngSwitch]='membe.role'>
+
+                                        <!-- if admin, remove is not allowed -->
+                                        <div *ngSwitchCase="'admin'">
+                                            <td class="align-middle" width="25%">Not Allowed</td>
+                                        </div>
+
+                                        <!-- if member,display remove -->
+                                        <div *ngSwitchCase="'member'">
+                                            <td class="align-middle" width="25%">
+                                                <button type="button" class="btn btn-danger btn-sm btn-rounded waves-light" mdbWavesEffect (click)="removemem(membe._id)">Remove</button>
+                                            </td>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- if current user is member remove is not allowed -->
+                                <div *ngSwitchCase="'Member'">
+                                    <td class="align-middle" width="25%">Not Allowed</td>
+                                </div>
+
+                            </div>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--End Team members Table -->
+        </div>
+
+        <hr>
+        <hr>
+        <!-- To Do Task -->
+        <h4 align="center" style=" padding-top: 2%">
+            <strong>Tasks to Do</strong>
+        </h4>
+
+        <div class="row">
+
+            <!-- get Task from Tasks -->
+            <div class="col-6 col-md-4" *ngFor="let task of tasks">
+
+                <!-- Task Card  -->
+                <div class="card card-cascade cascading-admin-card" style="padding-top: 10%; padding-bottom: 10%;">
+                    <div class="card-body text-center">
+                        <!--Title-->
+
+                        <h4 class="light-blue-text">
+                            <strong>{{task.task}}</strong>
+                        </h4>
+                        <p class="card-text">{{task.description}}</p>
+
+                        <h6 class="card-text">
+                            <i class="fa fa-calendar prefix"> Start Date : {{task.startdate}}</i>
+                        </h6>
+                        <h6 class="card-text">
+                            <i class="fa fa-calendar prefix"> End Date : {{task.enddate}}</i>
+                        </h6>
+                        <hr>
+
+                        <!-- check task is completed or not -->
+                        <div [ngSwitch]='task.status'>
+
+                            <!-- If task is pending, Display complete option -->
+                            <div *ngSwitchCase="'pending'">
+                                <button type="button" class="btn btn-outline-success btn-sm" mdbWavesEffect (click)=" completetask(task._id)">Complete</button>
+
+                                <!-- Check Logged user is Admin or member in the project -->
+                                <div [ngSwitch]='userstatus'>
+
+                                    <!-- If Admin display update and remove buttons -->
+                                    <div *ngSwitchCase="'Admin'">
+                                        <button type="button" class="btn btn-outline-info btn-sm" mdbWavesEffect (click)="form2.show();settaskvalues(task._id)">Update</button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" mdbWavesEffect (click)=" deletetask(task._id)">Remove</button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- If task is complete, Display completed person name -->
+                            <div *ngSwitchCase="'complete'">
+                                <h3 class="green-text">
+                                    <strong>Completed</strong>
+                                </h3>
+                                <!-- Display task completed person name -->
+                                <div *ngFor="let tas of task.member">
+                                    <h6 class="card-text">Completed By : {{tas.name}} </h6>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- Task Card  -->
+            </div>
+
+            <!-- check if current logged user is Admin of project and give permission to create new task -->
+            <div class="col-6 col-md-4" [ngSwitch]='userstatus'>
+
+                <div *ngSwitchCase="'Admin'">
+                    <a (click)="form.show()">
+                        <!--New task Card-->
+                        <div class="card card-cascade cascading-admin-card" style="padding-top: 10%; padding-bottom: 10%; ">
+
+                            <!--Card Data-->
+                            <div class="admin-up">
+                                <i class="fa fa-plus-square blue"></i>
+                                <div class="data">
+                                    <p>create</p>
+                                    <h4>
+                                        <strong>New Task</strong>
+                                    </h4>
+                                </div>
+                            </div>
+                            <!--/.Card Data-->
+
+                        </div>
+                        <!--/.New task Card-->
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!--Modal: New Task form-->
+        <div mdbModal #form="mdb-modal" class="modal fade" id="modalContactForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog cascading-modal" role="document">
+                <!--Content-->
+                <div class="modal-content">
+
+                    <!--Header-->
+                    <div class="modal-header light-blue darken-3 white-text">
+                        <h4 class="title">
+                            <i class="fa fa-pencil"></i> New Task</h4>
+                        <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close" (click)="form.hide()">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <!--Body-->
+                    <div class="modal-body mb-0">
+                        <form (ngSubmit)="createtask();form.hide();">
+
+                            <div class="md-form form-sm">
+                                <i class="fa fa-user prefix"></i>
+                                <input mdbInputDirective type="text" id="form19" class="form-control" [(ngModel)]="cname" name="name">
+                                <label for="form19">Task name</label>
+                            </div>
+
+                            <div class="md-form form-sm">
+                                <i class="fa fa-pencil prefix"></i>
+                                <textarea mdbInputDirective type="text" id="form8" class="md-textarea mb-0" [(ngModel)]="cdescription" name="description"></textarea>
+                                <label for="form8">Description</label>
+                            </div>
+
+                            <div class="md-form form-sm">
+                               Start Date
+                                <input mdbInputDirective type="date" id="form20" class="form-control" [(ngModel)]="cstartdate" name="startdate">
+                            </div>
+
+                            <div class="md-form form-sm">
+                                End Date
+                                <input mdbInputDirective type="date" id="form21" class="form-control" [(ngModel)]="cenddate" name="enddate">   
+                            </div>
+
+                            <div class="text-center mt-1-half">
+                                <button class="btn btn-info mb-2 waves-light" mdbWavesEffect>Create
+                                    <i class="fa fa-plus-circle ml-1"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!--/.Content-->
+            </div>
+        </div>
+        <!--Modal: New form-->
+
+
+        <!--Modal: Update Project form-->
+        <div mdbModal #form1="mdb-modal" class="modal fade" id="modalContactForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog cascading-modal" role="document">
+                <!--Content-->
+                <div class="modal-content">
+
+                    <!--Header-->
+                    <div class="modal-header light-blue darken-3 white-text">
+                        <h4 class="title">
+                            <i class="fa fa-pencil"></i> Update Project</h4>
+                        <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close" (click)="form1.hide()">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <!--Body-->
+                    <div class="modal-body mb-0">
+                        <form (ngSubmit)="updateproject();form1.hide();">
+
+                            <div class="md-form form-sm">
+                                <i class="fa fa-user prefix"></i>
+                                <input mdbInputDirective type="text" id="form19" class="form-control" [(ngModel)]="name" name="name" value="adsad">
+                                <label for="form19">Project name</label>
+                            </div>
+
+                            <div class="md-form form-sm">
+                                <i class="fa fa-pencil prefix"></i>
+                                <textarea mdbInputDirective type="text" id="form8" class="md-textarea mb-0" [(ngModel)]="description" name="description"></textarea>
+                                <label for="form8">Description</label>
+                            </div>
+
+                            <div class="md-form form-sm">
+                                Start Date
+                                <input mdbInputDirective type="date" id="form20" class="form-control" [(ngModel)]="startdate" name="startdate">
+                               
+                            </div>
+
+                            <div class="md-form form-sm">
+                                End Date
+                                <input mdbInputDirective type="date" id="form21" class="form-control" [(ngModel)]="enddate" name="enddate">
+                                
+                            </div>
+
+                            <div class="text-center mt-1-half">
+                                <button class="btn btn-info mb-2 waves-light" mdbWavesEffect>Update
+                                    <i class="fa fa-wrench ml-1"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!--/.Content-->
+            </div>
+        </div>
+        <!--Modal: Update Project form-->
+
+
+        <!--Modal: Update Task form-->
+        <div mdbModal #form2="mdb-modal" class="modal fade" id="modalContactForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog cascading-modal" role="document">
+                <!--Content-->
+                <div class="modal-content">
+
+                    <!--Header-->
+                    <div class="modal-header light-blue darken-3 white-text">
+                        <h4 class="title">
+                            <i class="fa fa-pencil"></i> Update Task</h4>
+                        <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close" (click)="form2.hide()">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <!--Body-->
+                    <div class="modal-body mb-0">
+                        <form (ngSubmit)="updatetask(); form2.hide();">
+
+                            <div class="md-form form-sm">
+                                <i class="fa fa-user prefix"></i>
+                                <input mdbInputDirective type="text" id="form19" class="form-control" [(ngModel)]="tname" name="tname" value="adsad">
+                                <label for="form19">Project name</label>
+                            </div>
+
+                            <div class="md-form form-sm">
+                                <i class="fa fa-pencil prefix"></i>
+                                <textarea mdbInputDirective type="text" id="form8" class="md-textarea mb-0" [(ngModel)]="tdescription" name="tdescription"></textarea>
+                                <label for="form8">Description</label>
+                            </div>
+
+                            <div class="md-form form-sm">
+                               Start Date
+                                <input mdbInputDirective type="date" id="form20" class="form-control" [(ngModel)]="tstartdate" name="tstartdate">
+                               
+                            </div>
+
+                            <div class="md-form form-sm">
+                               End Date
+                                <input mdbInputDirective type="date" id="form21" class="form-control" [(ngModel)]="tenddate" name="tenddate">
+                                
+                            </div>
+
+                            <div class="text-center mt-1-half">
+                                <button class="btn btn-info mb-2 waves-light" mdbWavesEffect>Update
+                                    <i class="fa fa-wrench ml-1"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!--/.Content-->
+            </div>
+        </div>
+        <!--Modal: Update Task form-->
+    </div>

@@ -1,0 +1,147 @@
+<!-- Hold process until all process in constructor, successfully loaded -->
+<div [ngSwitch]='status'>
+    <div *ngSwitchCase="false">
+
+        <div class="loader"></div>
+
+    </div>
+    <div *ngSwitchCase="true">
+
+        <section class="mt-lg-5">
+            <!--Grid row-->
+            <div class="row">
+
+                <!-- get project from otherprojects -->
+                <div *ngFor="let project of otherprojects; let i = index" class="col-xl-3 col-md-6 mb-r">
+
+                    <!-- get pro from project.project -->
+                    <div *ngFor="let pro of project.project">
+
+
+                        <!--Grid column-->
+
+                        <!-- pass project id with link -->
+                        <a [routerLink]="['/projects/']" fragment="{{pro._id}}">
+
+                            <!--Project Card-->
+                            <div class="card card-cascade cascading-admin-card" style="padding-top: 10%; padding-bottom: 10%;">
+
+                                <!--Card Data-->
+                                <div class="admin-up">
+                                    <i class="fa fa-product-hunt primary-color"></i>
+                                    <div class="data">
+                                        <p class="red-text">I am {{project.role}}</p>
+                                        <h4>
+                                            <strong>{{pro.name}} </strong>
+                                        </h4>
+                                    </div>
+                                </div>
+                                <!--/.Card Data-->
+
+                                <!--Card content-->
+                                <div class="card-body">
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" [ngStyle]="{'width.%':presentage[i]}"
+                                            aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <!--Text-->
+                                    <p class="card-text" align="center">Current Progress : {{presentage[i]}}%</p>
+                                </div>
+                                <!--/.Card content-->
+
+                            </div>
+                            <!--/.Project Card-->
+                        </a>
+                    </div>
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-xl-3 col-md-6 mb-r">
+                    <a (click)="form.show()">
+                        <!--New Project Create Card-->
+                        <div class="card card-cascade cascading-admin-card" style="padding-top: 10%; padding-bottom: 10%; ">
+
+                            <!--Card Data-->
+                            <div class="admin-up">
+                                <i class="fa fa-plus-circle red"></i>
+                                <div class="data">
+                                    <p>create</p>
+                                    <h4>
+                                        <strong>New Project</strong>
+                                    </h4>
+                                </div>
+                            </div>
+                            <!--/.Card Data-->
+
+                        </div>
+                        <!--/.New Project Create Card-->
+                    </a>
+                </div>
+                <!--Grid column-->
+
+            </div>
+            <!--Grid row-->
+
+
+            <!--Modal: New Project form-->
+            <div mdbModal #form="mdb-modal" class="modal fade" id="modalContactForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog cascading-modal" role="document">
+                    <!--Content-->
+                    <div class="modal-content">
+
+                        <!--Header-->
+                        <div class="modal-header light-blue darken-3 white-text">
+                            <h4 class="title">
+                                <i class="fa fa-pencil"></i> New Project</h4>
+                            <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close" (click)="form.hide()">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <!--Body-->
+                        <div class="modal-body mb-0">
+                            <form (ngSubmit)="createproject(); form.hide();">
+
+                                <div class="md-form form-sm">
+                                    <i class="fa fa-user prefix"></i>
+                                    <input mdbInputDirective type="text" id="form19" class="form-control" [(ngModel)]="name" name="name">
+                                    <label for="form19">Project name</label>
+                                </div>
+
+                                <div class="md-form form-sm">
+                                    <i class="fa fa-pencil prefix"></i>
+                                    <textarea mdbInputDirective type="text" id="form8" class="md-textarea mb-0" [(ngModel)]="description" name="description"></textarea>
+                                    <label for="form8">Description</label>
+                                </div>
+
+                                <div class="md-form form-sm">
+                                    Start Date
+                                    <input mdbInputDirective type="date" id="form20" class="form-control" [(ngModel)]="startdate" name="startdate">
+                                    
+                                </div>
+
+                                <div class="md-form form-sm">
+                                    End Date
+                                    <input mdbInputDirective type="date" id="form21" class="form-control" [(ngModel)]="enddate" name="enddate">
+                                    
+                                </div>
+
+                                <div class="text-center mt-1-half">
+                                    <button class="btn btn-info mb-2 waves-light" mdbWavesEffect>Create
+                                        <i class="fa fa-plus-circle ml-1"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!--/.Content-->
+                </div>
+            </div>
+            <!--Modal: Contact form-->
+
+
+        </section>
+
+    </div>
+</div>

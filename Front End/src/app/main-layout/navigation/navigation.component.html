@@ -1,0 +1,74 @@
+<!--Main Navigation-->
+<header>
+
+    <!-- Navbar -->
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
+        <div class="container-fluid">
+
+            <!-- Collapse -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Links -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                <!-- Left -->
+                <ul class="navbar-nav mr-auto">
+                    <h5 class="mb-sm-0 pt-3">
+                        <span>
+                            <strong>TeamWork</strong>
+                        </span>
+                    </h5>
+
+                </ul>
+
+                <!-- Right -->
+                <ul class="navbar-nav nav-flex-icons">
+                    <li class="nav-item">
+                        <h6 class="mb-sm-0 pt-3">
+                            <span>Welcome {{username}} </span>
+                        </h6>
+                    </li>
+
+                    <li class="nav-item">
+
+                        <!-- Logout -->
+                        <button class="btn btn-outline-primary btn-rounded btn-sm" mdbWavesEffect (click)="usersignout()">Log out
+                            <i class="fa fa-sign-out ml-1"></i>
+                        </button>
+                    </li>
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+    <!-- Navbar -->
+
+    <!-- Sidebar -->
+    <div class="sidebar-fixed position-fixed" id="sidebari">
+
+        <!-- Logo -->
+        <a class="logo-wrapper waves-effect">
+            <a routerLink="dashboards">
+                <img src="../../../../assets/img/TeamWork.png" class="img-fluid" alt="TeamWork Logo"> </a>
+        </a>
+
+        <div class="list-group list-group-flush">
+
+            <a routerLink="dashboards" routerLinkActive="active" class="list-group-item list-group-item-action waves-effect">
+                <i class="fa fa-tachometer mr-3"></i>Dashboard
+            </a>
+            <a routerLink="projects/" routerLinkActive="active" class="list-group-item list-group-item-action waves-effect">
+                <i class="fa fa-cogs mr-3"></i>Project
+            </a>
+
+        </div>
+
+    </div>
+    <!-- Sidebar -->
+
+</header>
+<!--Main Navigation-->
