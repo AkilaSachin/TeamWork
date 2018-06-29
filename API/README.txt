@@ -1,8 +1,5 @@
-TeamWork Dashboard
+TeamWork API
   
-Version: MDB - Angular Admin Dashboard 6.1.1
-
-
 Install:
 npm i
 
